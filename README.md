@@ -24,9 +24,3 @@ cd installer && makensis SakoraSetup.nsi
 ```
 
 Produces `installer/SakoraSetup.exe`.
-
-## Code signing
-
-Release binaries are signed through the free
-[SignPath Foundation](https://signpath.org/) program for open-source projects.
-See `CODE_SIGNING_POLICY.md`.
