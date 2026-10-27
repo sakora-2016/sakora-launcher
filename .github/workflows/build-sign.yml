@@ -1,0 +1,49 @@
+name: Build and sign installer
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      artifact-id: ${{ steps.upload.outputs.artifact-id }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install NSIS
+        run: sudo apt-get update && sudo apt-get install -y nsis
+      - name: Build installer
+        run: cd installer && makensis SakoraSetup.nsi
+      - name: Upload unsigned installer
+        id: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: SakoraSetup-unsigned
+          path: installer/SakoraSetup.exe
+
+  sign:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      # ---- Fill these three in after SignPath approves your project ----
+      # organization-id : from your SignPath dashboard
+      # project-slug    : "sakora-launcher" (or whatever you name the project)
+      # signing-policy  : "release-signing" (SignPath creates this)
+      # Also add a repo secret named SIGNPATH_API_TOKEN (Settings > Secrets > Actions).
+      - name: Sign with SignPath
+        uses: signpath/github-action-submit-signing-request@v1
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: 'REPLACE_WITH_SIGNPATH_ORGANIZATION_ID'
+          project-slug: 'sakora-launcher'
+          signing-policy-slug: 'release-signing'
+          github-artifact-id: ${{ needs.build.outputs.artifact-id }}
+          wait-for-completion: true
+          output-artifact-directory: 'signed'
+      - name: Upload signed installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: SakoraSetup-signed
+          path: signed
