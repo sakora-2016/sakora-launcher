@@ -33,7 +33,7 @@ jobs:
       # signing-policy  : "release-signing" (SignPath creates this)
       # Also add a repo secret named SIGNPATH_API_TOKEN (Settings > Secrets > Actions).
       - name: Sign with SignPath
-        uses: signpath/github-action-submit-signing-request@v1
+        uses: signpath/github-action-submit-signing-request@v3
         with:
           api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
           organization-id: 'REPLACE_WITH_SIGNPATH_ORGANIZATION_ID'
