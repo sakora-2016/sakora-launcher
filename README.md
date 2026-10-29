@@ -6,6 +6,8 @@ from the project's own server, unpacks it, registers the `sakora://` protocol,
 and sets up a local hosts / port-proxy entry so the client can reach the
 Sakora server.
 
+**Website:** [sakora.fun](https://sakora.fun)
+
 This is a fan project and is not affiliated with any other company.
 
 ## What's here
